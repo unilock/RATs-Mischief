@@ -18,6 +18,7 @@ import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.render.item.ItemRenderer;
+import net.minecraft.client.render.model.BakedModelManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
@@ -50,7 +51,7 @@ public abstract class ArmorFeatureRendererMixin<T extends LivingEntity, M extend
 	}
 
 	@Inject(method = "<init>", at = @At("TAIL"))
-	private void mischief$init(FeatureRendererContext<T, M> context, A leggingsModel, A bodyModel, CallbackInfo ci) {
+	private void mischief$init(FeatureRendererContext<T, M> context, A leggingsModel, A bodyModel, BakedModelManager modelManager, CallbackInfo ci) {
 		if (context instanceof EntityRendererWrapper wrapper) {
 			if (context instanceof PlayerEntityRendererWrapper playerWrapper) {
 				this.slim = playerWrapper.mischief$isSlim();
