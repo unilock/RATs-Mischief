@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(targets = "net/minecraft/block/entity/SculkShriekerBlockEntity$VibrationCallback")
 public class SculkShriekerBlockEntityMixin {
 	@Inject(method = "accepts", at = @At(value = "HEAD"), cancellable = true)
-	private void mischief$noRats(ServerWorld world, BlockPos pos, GameEvent event, GameEvent.Context eventContext, CallbackInfoReturnable<Boolean> cir) {
+	private void mischief$noRats(ServerWorld world, BlockPos pos, GameEvent event, GameEvent.Emitter eventContext, CallbackInfoReturnable<Boolean> cir) {
 		if (eventContext.sourceEntity() instanceof RatEntity) {
 			cir.setReturnValue(false);
 		}

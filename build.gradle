@@ -1,61 +1,56 @@
 plugins {
-	id 'maven-publish'
-	id 'io.github.ladysnake.chenille' version '0.11.3'
+	id 'fabric-loom' version '1.9.+'
 }
+
+version = "${project.mod_version}+${project.minecraft_version}+fabric"
+group = project.maven_group
 
 base {
 	archivesName = project.archives_base_name
 }
 
-version = project.version
-group = project.maven_group
-
 loom {
 	mods {
-		"ratsmischief" {
+		'ratsmischief' {
 			sourceSet sourceSets.main
 		}
 	}
 }
 
 repositories {
-	mavenLocal()
-
-	// CCA, Requiem
-	chenille.repositories.ladysnake()
-
-	// Mod Menu
-	maven { url = "https://maven.terraformersmc.com/" }
-
 	// GeckoLib
-	maven { url = "https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/" }
-
-	// MialeeMisc
-	maven { url = "https://maven.willbl.dev/releases/" }
-
-	// Publishing
 	maven {
-		name = "CurseForge"
-		url = "https://minecraft.curseforge.com/api/maven"
-	}
-	maven {
-		name = "Modrinth"
-		url = "https://api.modrinth.com/maven"
+		name = 'GeckoLib'
+		url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
 	}
 
-	mavenCentral()
-	maven { url = "https://jitpack.io" }
+	// CCA
+	maven {
+		name = 'Ladysnake Mods'
+		url = 'https://maven.ladysnake.org/releases/'
+	}
+
+	// Trinkets, Mod Menu
+	maven {
+		name = 'TerraformersMC'
+		url = 'https://maven.terraformersmc.com/'
+	}
+
+	// Step Height Entity Attribute
+	maven {
+		name = 'JitPack'
+		url = 'https://jitpack.io/'
+	}
 }
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "org.quiltmc:quilt-mappings:${minecraft_version}+build.${quilt_mappings}:intermediary-v2"
+	mappings "net.fabricmc:yarn:${project.minecraft_version}+build.${project.yarn_mappings}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	modImplementation "org.quiltmc:quilt-loader:${project.loader_version}"
-	modImplementation "org.quiltmc:qsl:${qsl_version}+${minecraft_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}+${project.minecraft_version}"
 
-	modImplementation "org.quiltmc.quilted-fabric-api:quilted-fabric-api:${quilted_fabric_api_version}-${minecraft_version}"
-
+	// GeckoLib
 	modImplementation("software.bernie.geckolib:${project.geckolib_version}") {
 		exclude group: 'net.fabricmc'
 		exclude group: 'net.fabricmc.fabric-api'
@@ -67,56 +62,40 @@ dependencies {
 		exclude group: 'net.fabricmc.fabric-api'
 	}
 
-	// Mod Menu
-	modLocalRuntime("com.terraformersmc:modmenu:${mod_menu_version}") {
-		transitive = false
-	}
-
-	// MialeeMisc
-	//modImplementation include("xyz.amymialee:mialeemisc:${project.mialeemisc_version}")
-
-	// CCA
-	//modCompileOnly include("dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cca_version}")
-
-	// Requiem
-	//modCompileOnly("io.github.ladysnake:PlayerAbilityLib:${project.pal_version}")
-	//modImplementation("io.github.ladysnake:requiem-api:${project.requiem_version}")
-	//modImplementation("io.github.ladysnake:requiem-core:${project.requiem_version}")
-	//modImplementation include("io.github.ladysnake:requiem-lite:${project.requiem_version}")
-
 	// Trinkets
 	modImplementation("dev.emi:trinkets:${project.trinkets_version}") {
 		exclude group: 'net.fabricmc'
 		exclude group: 'net.fabricmc.fabric-api'
 	}
-}
 
-chenille {
-	javaVersion = 17
-	configurePublishing {
-		mainArtifact = remapJar.archiveFile
-		withLadysnakeMaven()
-		withCurseforgeRelease()
-		withGithubRelease()
-		withModrinthRelease()
+	// Mod Menu
+	modLocalRuntime("com.terraformersmc:modmenu:${mod_menu_version}") {
+		transitive = false
 	}
 }
 
 processResources {
 	inputs.property 'version', version
 
-	filesMatching('quilt.mod.json') {
+	filesMatching('fabric.mod.json') {
 		expand "version": version
 	}
 }
 
-java {
-	withSourcesJar()
+tasks.withType(JavaCompile).configureEach {
+	it.options.encoding = 'UTF-8'
+	it.options.release = 17
 }
 
-// If you plan to use a different file for the license, don't forget to change the file name here!
+java {
+	withSourcesJar()
+
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_17
+}
+
 jar {
 	from('LICENSE') {
-		rename { "${it}_${project.base.archivesName.get()}" }
+		rename { "${it}_${base.archivesName.get()}" }
 	}
 }

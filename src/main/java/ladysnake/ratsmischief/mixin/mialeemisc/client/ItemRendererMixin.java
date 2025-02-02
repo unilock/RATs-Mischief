@@ -22,7 +22,7 @@ public abstract class ItemRendererMixin {
 
 	@Shadow @Final private ItemModels models;
 
-	@Inject(method = "getHeldItemModel", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "getModel", at = @At("HEAD"), cancellable = true)
 	private void mialeeMisc$heldItemModel(ItemStack stack, World world, LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> cir) {
 		if (ModItems.RAT_MASTER_MASK.equals(stack.getItem())) {
 			var bakedModel = this.models.getModelManager().getModel(new ModelIdentifier(new Identifier("minecraft:trident_in_hand"), "inventory"));

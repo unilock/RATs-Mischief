@@ -1,10 +1,10 @@
 package ladysnake.ratsmischief.client.render.entity;
 
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import ladysnake.ratsmischief.client.model.RatEntityModel;
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
@@ -13,8 +13,8 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Axis;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Quaternionf;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
@@ -65,7 +65,7 @@ public class RatEntityRenderer extends GeoEntityRenderer<RatEntity> {
 	public void renderRecursively(MatrixStack stack, RatEntity animatable, GeoBone bone, RenderLayer renderType, VertexConsumerProvider bufferSourceIn, VertexConsumer bufferIn, boolean isReRender, float partialTick, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
 		if (bone.getName().equals("bodybone")) {
 			stack.push();
-			stack.multiply(Axis.X_POSITIVE.rotationDegrees(-90));
+			stack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
 			stack.translate(bone.getPosX(), bone.getPosZ(), bone.getPosY() - 0.05);
 			stack.scale(0.7f, 0.7f, 0.7f);
 			stack.multiply(new Quaternionf(bone.getRotX(), bone.getRotZ(), bone.getRotY(), 1.0F));

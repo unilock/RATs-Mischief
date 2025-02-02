@@ -15,7 +15,6 @@ import ladysnake.ratsmischief.common.init.ModSoundEvents;
 import ladysnake.ratsmischief.common.init.ModTags;
 import ladysnake.ratsmischief.common.item.RatMasterArmorItem;
 import ladysnake.ratsmischief.common.util.PlayerRatOwner;
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
@@ -27,6 +26,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.ai.goal.AnimalMateGoal;
 import net.minecraft.entity.ai.goal.AttackWithOwnerGoal;
 import net.minecraft.entity.ai.goal.FollowOwnerGoal;
@@ -37,7 +37,6 @@ import net.minecraft.entity.ai.goal.PounceAtTargetGoal;
 import net.minecraft.entity.ai.goal.RevengeGoal;
 import net.minecraft.entity.ai.goal.SitGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.ai.goal.TrackOwnerAttackerGoal;
 import net.minecraft.entity.ai.goal.UniversalAngerGoal;
 import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
@@ -84,8 +83,8 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.int_provider.UniformIntProvider;
-import net.minecraft.util.random.RandomGenerator;
+import net.minecraft.util.math.intprovider.UniformIntProvider;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.EntityView;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
@@ -147,15 +146,15 @@ public class RatEntity extends TameableEntity implements GeoEntity, Angerable {
 	}
 
 	public static DefaultAttributeContainer.Builder createRatAttributes() {
-		return MobEntity.createAttributes().add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 0.0D).add(StepHeightEntityAttributeMain.STEP_HEIGHT, 2.0D).add(EntityAttributes.GENERIC_MAX_HEALTH, 8.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.5D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 0.1).add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32);
+		return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_ATTACK_KNOCKBACK, 0.0D).add(StepHeightEntityAttributeMain.STEP_HEIGHT, 2.0D).add(EntityAttributes.GENERIC_MAX_HEALTH, 8.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.5D).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 0.1).add(EntityAttributes.GENERIC_FOLLOW_RANGE, 32);
 	}
 
-	public static Type getRandomNaturalType(RandomGenerator random) {
+	public static Type getRandomNaturalType(Random random) {
 		return NATURAL_TYPES.get(random.nextInt(NATURAL_TYPES.size()));
 	}
 
 	@Override
-	protected void initEquipment(RandomGenerator random, LocalDifficulty localDifficulty) {
+	protected void initEquipment(Random random, LocalDifficulty localDifficulty) {
 		// try spawning with cake on birthday
 		if (RatsMischiefUtils.IS_BIRTHDAY && !this.isBaby() && this.getRandom().nextInt(5) == 0) {
 			this.setStackInHand(Hand.MAIN_HAND, new ItemStack(Items.CAKE));
@@ -235,7 +234,7 @@ public class RatEntity extends TameableEntity implements GeoEntity, Angerable {
 		this.targetSelector.add(1, new TrackOwnerAttackerGoal(this));
 		this.targetSelector.add(2, new AttackWithOwnerGoal(this));
 		this.targetSelector.add(3, new RevengeGoal(this).setGroupRevenge());
-		this.targetSelector.add(4, new TargetGoal<>(this, PlayerEntity.class, 10, true, false, this::shouldAngerAt));
+		this.targetSelector.add(4, new ActiveTargetGoal<>(this, PlayerEntity.class, 10, true, false, this::shouldAngerAt));
 		this.targetSelector.add(8, new ChaseForFunGoal<>(this, CatEntity.class, true));
 		this.targetSelector.add(8, new UniversalAngerGoal<>(this, true));
 	}
@@ -539,7 +538,7 @@ public class RatEntity extends TameableEntity implements GeoEntity, Angerable {
 	}
 
 	protected boolean canHit(Entity entity) {
-		if (!entity.isSpectator() && entity.isAlive() && entity.collides()) {
+		if (!entity.isSpectator() && entity.isAlive() && entity.canHit()) {
 			Entity entity2 = this.getOwner();
 			return entity2 == null || entity != entity2 || !entity2.isConnectedThroughVehicle(entity);
 		} else {
@@ -927,7 +926,7 @@ public class RatEntity extends TameableEntity implements GeoEntity, Angerable {
 		if (damageSource.getAttacker() == this.getOwner() && RatMasterArmorItem.getEquippedPieces(this.getOwner()) >= 4) {
 			return true;
 		}
-		if (damageSource.isType(DamageTypes.CACTUS) || damageSource.isType(DamageTypes.SWEET_BERRY_BUSH) || damageSource.getAttacker() instanceof EnderDragonEntity || damageSource.isType(DamageTypes.CRAMMING)) {
+		if (damageSource.isOf(DamageTypes.CACTUS) || damageSource.isOf(DamageTypes.SWEET_BERRY_BUSH) || damageSource.getAttacker() instanceof EnderDragonEntity || damageSource.isOf(DamageTypes.CRAMMING)) {
 			return true;
 		} else {
 			return super.isInvulnerableTo(damageSource);
@@ -1045,7 +1044,7 @@ public class RatEntity extends TameableEntity implements GeoEntity, Angerable {
 	}
 
 	@Override
-	public EntityView getEntityView() {
+	public EntityView method_48926() {
 		return this.getWorld();
 	}
 

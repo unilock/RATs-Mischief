@@ -1,12 +1,12 @@
 package ladysnake.ratsmischief.common.init;
 
 import ladysnake.ratsmischief.common.RatsMischief;
+import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import org.quiltmc.qsl.item.setting.api.QuiltItemSettings;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -23,7 +23,7 @@ public interface ModBlocks {
 	private static <T extends Block> T createBlock(String name, T block, boolean createItem) {
 		BLOCKS.put(block, RatsMischief.id(name));
 		if (createItem) {
-			ModItems.ITEMS.put(new BlockItem(block, new QuiltItemSettings()), BLOCKS.get(block));
+			ModItems.ITEMS.put(new BlockItem(block, new FabricItemSettings()), BLOCKS.get(block));
 		}
 		return block;
 	}

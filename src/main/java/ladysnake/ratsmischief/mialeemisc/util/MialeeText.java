@@ -11,7 +11,7 @@ public class MialeeText {
 	 */
 	public static Text withColor(Text text, int color) {
 		Style style = text.getStyle().withColor(color);
-		List<Text> styled = text.setStyle(style);
+		List<Text> styled = text.getWithStyle(style);
 		if (!styled.isEmpty()) {
 			return styled.get(0);
 		}
@@ -23,7 +23,7 @@ public class MialeeText {
 	 * Takes a text and returns the same text but with without italics.
 	 */
 	public static Text withoutItalics(Text text) {
-		List<Text> styled = text.setStyle(text.getStyle().withItalic(false));
+		List<Text> styled = text.getWithStyle(text.getStyle().withItalic(false));
 		if (!styled.isEmpty()) {
 			return styled.get(0);
 		}

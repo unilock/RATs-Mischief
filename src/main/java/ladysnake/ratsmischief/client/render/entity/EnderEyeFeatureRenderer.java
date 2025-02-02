@@ -1,9 +1,9 @@
 package ladysnake.ratsmischief.client.render.entity;
 
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import ladysnake.ratsmischief.common.RatsMischief;
 import ladysnake.ratsmischief.common.entity.RatEntity;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;

@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class RatMasterHoodItem extends RatMasterArmorItem {
-	public RatMasterHoodItem(ArmorMaterial material, ArmorSlot slot, Settings settings) {
+	public RatMasterHoodItem(ArmorMaterial material, Type slot, Settings settings) {
 		super(material, slot, settings);
 	}
 

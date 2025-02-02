@@ -1,6 +1,7 @@
 package ladysnake.ratsmischief.client.render.item;
 
 import net.fabricmc.fabric.api.client.rendering.v1.BuiltinItemRendererRegistry;
+import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.item.ItemRenderer;
@@ -14,12 +15,11 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Unit;
 import net.minecraft.util.profiler.Profiler;
 import org.jetbrains.annotations.NotNull;
-import org.quiltmc.qsl.resource.loader.api.reloader.IdentifiableResourceReloader;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
-public class RatMasterMaskItemRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer, IdentifiableResourceReloader {
+public class RatMasterMaskItemRenderer implements BuiltinItemRendererRegistry.DynamicItemRenderer, IdentifiableResourceReloadListener {
 	private final Identifier rendererId;
 	private final Identifier itemId;
 	private ItemRenderer itemRenderer;
@@ -32,7 +32,7 @@ public class RatMasterMaskItemRenderer implements BuiltinItemRendererRegistry.Dy
 	}
 
 	@Override
-	public @NotNull Identifier getQuiltId() {
+	public @NotNull Identifier getFabricId() {
 		return this.rendererId;
 	}
 

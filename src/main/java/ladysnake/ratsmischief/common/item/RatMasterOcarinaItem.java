@@ -9,8 +9,8 @@ import ladysnake.ratsmischief.mialeemisc.items.IClickConsumingItem;
 import ladysnake.ratsmischief.mialeemisc.util.MialeeMath;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.TargetGoal;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -49,7 +49,7 @@ public class RatMasterOcarinaItem extends Item implements IClickConsumingItem {
 				case HARVEST -> goal = new HarvestPlantMealGoal(ratEntity);
 				case COLLECT -> ratEntity.removeCurrentActionGoal();
 				case SKIRMISH ->
-					goal = new TargetGoal<>(ratEntity, HostileEntity.class, 10, true, false, livingEntity -> true);
+					goal = new ActiveTargetGoal<>(ratEntity, HostileEntity.class, 10, true, false, livingEntity -> true);
 				case LOVE -> goal = new BreedGoal(ratEntity);
 			}
 			if (goal != null) {

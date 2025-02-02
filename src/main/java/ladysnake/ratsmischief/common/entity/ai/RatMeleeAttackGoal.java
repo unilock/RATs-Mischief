@@ -28,7 +28,7 @@ public class RatMeleeAttackGoal extends Goal {
 		this.rat = rat;
 		this.speed = speed;
 		this.pauseWhenMobIdle = pauseWhenMobIdle;
-		this.setControls(EnumSet.of(Goal.Control.MOVE, Goal.Control.LOOK));
+		this.setControls(EnumSet.of(Control.MOVE, Control.LOOK));
 	}
 
 	@Override
@@ -98,7 +98,7 @@ public class RatMeleeAttackGoal extends Goal {
 	}
 
 	@Override
-	public boolean requiresUpdateEveryTick() {
+	public boolean shouldRunEveryTick() {
 		return true;
 	}
 

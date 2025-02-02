@@ -6,10 +6,10 @@ import ladysnake.ratsmischief.common.item.RatItem;
 import net.minecraft.inventory.RecipeInputInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.recipe.CraftingCategory;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialCraftingRecipe;
+import net.minecraft.recipe.book.CraftingRecipeCategory;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
@@ -19,8 +19,8 @@ public class SpyRatCraftingRecipe extends SpecialCraftingRecipe {
 	private static final Ingredient RABBIT_HIDE = Ingredient.ofItems(Items.RABBIT_HIDE);
 	private static final Ingredient ENDER_EYE = Ingredient.ofItems(Items.ENDER_EYE);
 
-	public SpyRatCraftingRecipe(Identifier id, CraftingCategory craftingCategory) {
-		super(id, CraftingCategory.MISC);
+	public SpyRatCraftingRecipe(Identifier id, CraftingRecipeCategory craftingCategory) {
+		super(id, CraftingRecipeCategory.MISC);
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class SpyRatCraftingRecipe extends SpecialCraftingRecipe {
 	}
 
 	@Override
-	public ItemStack getResult(DynamicRegistryManager registryManager) {
+	public ItemStack getOutput(DynamicRegistryManager registryManager) {
 		return new ItemStack(ModItems.RAT);
 	}
 

@@ -20,7 +20,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.quiltmc.loader.api.minecraft.ClientOnly;
 
 import java.util.List;
 import java.util.Set;
@@ -28,7 +27,7 @@ import java.util.Set;
 public class RatMasterArmorItem extends ArmorItem {
 	public static final Set<EquipmentSlot> SLOTS = Set.of(EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET);
 
-	public RatMasterArmorItem(ArmorMaterial material, ArmorSlot slot, Settings settings) {
+	public RatMasterArmorItem(ArmorMaterial material, Type slot, Settings settings) {
 		super(material, slot, settings);
 	}
 
@@ -126,12 +125,12 @@ public class RatMasterArmorItem extends ArmorItem {
 		private static final int[] PROTECTION_AMOUNTS = new int[]{3, 6, 8, 3};
 
 		@Override
-		public int getDurability(ArmorSlot slot) {
+		public int getDurability(Type slot) {
 			return BASE_DURABILITY[slot.getEquipmentSlot().getEntitySlotId()] * 38;
 		}
 
 		@Override
-		public int getProtection(ArmorSlot slot) {
+		public int getProtection(Type slot) {
 			return PROTECTION_AMOUNTS[slot.getEquipmentSlot().getEntitySlotId()];
 		}
 
@@ -165,9 +164,10 @@ public class RatMasterArmorItem extends ArmorItem {
 			return 0.0f;
 		}
 
-		@Override
-		public @ClientOnly @NotNull Identifier getTexture() {
-			return TEXTURE;
-		}
+		// TODO
+//		@Override
+//		public @ClientOnly @NotNull Identifier getTexture() {
+//			return TEXTURE;
+//		}
 	}
 }

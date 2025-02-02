@@ -2,8 +2,8 @@ package ladysnake.ratsmischief.mialeemisc;
 
 import ladysnake.ratsmischief.common.RatsMischief;
 import ladysnake.ratsmischief.mialeemisc.items.IClickConsumingItem;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.util.Identifier;
-import org.quiltmc.qsl.networking.api.ServerPlayNetworking;
 
 public class MialeeMisc {
 	public static final Identifier clickConsumePacket = RatsMischief.id("click_consume");

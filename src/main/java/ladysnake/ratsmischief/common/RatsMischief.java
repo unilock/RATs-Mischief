@@ -11,6 +11,8 @@ import ladysnake.ratsmischief.common.init.ModStatusEffects;
 import ladysnake.ratsmischief.common.init.ModTags;
 import ladysnake.ratsmischief.common.world.RatSpawner;
 import ladysnake.ratsmischief.mialeemisc.MialeeMisc;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.decoration.painting.PaintingVariant;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialRecipeSerializer;
@@ -18,9 +20,6 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.Difficulty;
-import org.quiltmc.loader.api.ModContainer;
-import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
-import org.quiltmc.qsl.lifecycle.api.event.ServerWorldTickEvents;
 
 public class RatsMischief implements ModInitializer {
 	public static final String MOD_ID = "ratsmischief";
@@ -33,7 +32,7 @@ public class RatsMischief implements ModInitializer {
 	}
 
 	@Override
-	public void onInitialize(ModContainer mod) {
+	public void onInitialize() {
 		// initializing stuff
 		ModEntities.initialize();
 		ModBlocks.initialize();
@@ -47,9 +46,9 @@ public class RatsMischief implements ModInitializer {
 
 		// custom rat spawner in abandoned villages
 		RatSpawner ratSpawner = new RatSpawner();
-		ServerWorldTickEvents.END.register((server, world) -> {
+		ServerTickEvents.END_WORLD_TICK.register(world -> {
 			// spawn rats
-			ratSpawner.spawn(world, world.getDifficulty() != Difficulty.PEACEFUL, server.shouldSpawnAnimals());
+			ratSpawner.spawn(world, world.getDifficulty() != Difficulty.PEACEFUL, world.getServer().shouldSpawnAnimals());
 		});
 
 		// rat kid painting
