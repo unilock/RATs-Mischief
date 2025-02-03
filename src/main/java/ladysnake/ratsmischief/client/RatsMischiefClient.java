@@ -48,7 +48,7 @@ public class RatsMischiefClient implements ClientModInitializer {
 		BuiltinItemRendererRegistry.INSTANCE.register(ModItems.RAT_MASTER_MASK, inventoryItemRenderer);
 		ModelLoadingPlugin.register(pluginContext -> {
             pluginContext.addModels(new ModelIdentifier(itemId, "inventory"));
-            pluginContext.addModels(new ModelIdentifier(new Identifier(itemId.getNamespace(), itemId.getPath() + "_worn"), "inventory"));
+            pluginContext.addModels(new ModelIdentifier(itemId.withSuffixedPath("_worn"), "inventory"));
         });
 
 		// model predicates

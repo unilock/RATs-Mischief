@@ -44,7 +44,7 @@ public class RatMasterMaskItemRenderer implements BuiltinItemRendererRegistry.Dy
 			final MinecraftClient client = MinecraftClient.getInstance();
 			this.itemRenderer = client.getItemRenderer();
 			this.inventoryModel = client.getBakedModelManager().getModel(new ModelIdentifier(this.itemId, "inventory"));
-			this.wornModel = client.getBakedModelManager().getModel(new ModelIdentifier(new Identifier(this.itemId.getNamespace(), this.itemId.getPath() + "_worn"), "inventory"));
+			this.wornModel = client.getBakedModelManager().getModel(new ModelIdentifier(this.itemId.withSuffixedPath("_worn"), "inventory"));
 			applyProfiler.pop();
 			applyProfiler.endTick();
 		}, applyExecutor);

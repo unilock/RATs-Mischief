@@ -32,11 +32,11 @@ public class RatEntityModel extends GeoModel<RatEntity> {
 	public void setCustomAnimations(RatEntity ratEntity, long instanceId, AnimationState<RatEntity> animationState) {
 		super.setCustomAnimations(ratEntity, instanceId, animationState);
 
-		CoreGeoBone head = this.getAnimationProcessor().getBone("head");
-		CoreGeoBone leftEar = this.getAnimationProcessor().getBone("leftear");
-		CoreGeoBone rightEar = this.getAnimationProcessor().getBone("rightear");
+		if (!(ratEntity.isSniffing() || ratEntity.isEating() || ratEntity.isFlying())) {
+			CoreGeoBone head = this.getAnimationProcessor().getBone("head");
+			CoreGeoBone leftEar = this.getAnimationProcessor().getBone("leftear");
+			CoreGeoBone rightEar = this.getAnimationProcessor().getBone("rightear");
 
-		if (head != null && !ratEntity.isSniffing() && !ratEntity.isEating() && !ratEntity.isFlying()) {
 			head.setRotX(MathHelper.clamp(-ratEntity.getPitch(), 0, 90) * ((float) Math.PI / 180F));
 			leftEar.setRotX(MathHelper.clamp(ratEntity.getPitch(), -90, 0) * 1.4f * ((float) Math.PI / 180F));
 			rightEar.setRotX(MathHelper.clamp(ratEntity.getPitch(), -90, 0) * 1.4f * ((float) Math.PI / 180F));
@@ -51,15 +51,6 @@ public class RatEntityModel extends GeoModel<RatEntity> {
 
 			tail.setRotX((float) (-45 * Math.PI / 180));
 			tailend.setRotX((float) (-30 * Math.PI / 180));
-		}
-
-		if (ratEntity.isBaby()) {
-			CoreGeoBone root = this.getAnimationProcessor().getBone("root");
-			if (root != null) {
-				root.setScaleX(0.5f);
-				root.setScaleY(0.5f);
-				root.setScaleZ(0.5f);
-			}
 		}
 	}
 }

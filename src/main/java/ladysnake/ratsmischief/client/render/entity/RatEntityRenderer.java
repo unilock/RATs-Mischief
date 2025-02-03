@@ -12,7 +12,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DyeColor;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
@@ -22,11 +21,6 @@ import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class RatEntityRenderer extends GeoEntityRenderer<RatEntity> {
-	// variables needed for later
-	private ItemStack itemStack;
-	private VertexConsumerProvider vertexConsumerProvider;
-	private Identifier ratTexture;
-
 	public RatEntityRenderer(EntityRendererFactory.Context context) {
 		super(context, new RatEntityModel());
 		this.shadowRadius = 0.35f;
@@ -53,31 +47,30 @@ public class RatEntityRenderer extends GeoEntityRenderer<RatEntity> {
 	}
 
 	@Override
-	public void preRender(MatrixStack poseStack, RatEntity ratEntity, BakedGeoModel model, VertexConsumerProvider vertexConsumerProvider, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		this.itemStack = ratEntity.isSitting() || ratEntity.isSneaking() ? ItemStack.EMPTY : ratEntity.getEquippedStack(EquipmentSlot.MAINHAND);
-		this.vertexConsumerProvider = vertexConsumerProvider;
-		this.ratTexture = this.getTexture(ratEntity);
+	public void renderRecursively(MatrixStack poseStack, RatEntity animatable, GeoBone bone, RenderLayer renderType, VertexConsumerProvider bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+		if (bone.getName().equals("bodybone") && !(animatable.isSitting() || animatable.isSneaking())) {
+			ItemStack itemStack = animatable.getEquippedStack(EquipmentSlot.MAINHAND);
+			if (!itemStack.isEmpty()) {
+				poseStack.push();
+				poseStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
+				poseStack.translate(bone.getPosX(), bone.getPosZ(), bone.getPosY() - 0.05);
+				poseStack.scale(0.7f, 0.7f, 0.7f);
+				poseStack.multiply(new Quaternionf(bone.getRotX(), bone.getRotZ(), bone.getRotY(), 1.0F));
 
-		super.preRender(poseStack, ratEntity, model, vertexConsumerProvider, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
+				MinecraftClient.getInstance().getItemRenderer().renderItem(itemStack, ModelTransformationMode.THIRD_PERSON_RIGHT_HAND, packedLight, packedOverlay, poseStack, bufferSource, animatable.getWorld(), 0);
+				poseStack.pop();
+
+				// restore the render buffer - GeckoLib expects this state otherwise you'll have weird texture issues
+				buffer = bufferSource.getBuffer(RenderLayer.getEntityCutout(this.getTexture(animatable)));
+			}
+		}
+
+		super.renderRecursively(poseStack, animatable, bone, renderType, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 
 	@Override
-	public void renderRecursively(MatrixStack stack, RatEntity animatable, GeoBone bone, RenderLayer renderType, VertexConsumerProvider bufferSourceIn, VertexConsumer bufferIn, boolean isReRender, float partialTick, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-		if (bone.getName().equals("bodybone")) {
-			stack.push();
-			stack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
-			stack.translate(bone.getPosX(), bone.getPosZ(), bone.getPosY() - 0.05);
-			stack.scale(0.7f, 0.7f, 0.7f);
-			stack.multiply(new Quaternionf(bone.getRotX(), bone.getRotZ(), bone.getRotY(), 1.0F));
-
-			MinecraftClient.getInstance().getItemRenderer().renderItem(this.itemStack, ModelTransformationMode.THIRD_PERSON_RIGHT_HAND, packedLightIn, packedOverlayIn, stack, this.vertexConsumerProvider, animatable.getWorld(), 0);
-			stack.pop();
-
-			// restore the render buffer - GeckoLib expects this state otherwise you'll have weird texture issues
-			bufferIn = this.vertexConsumerProvider.getBuffer(RenderLayer.getEntityCutout(this.ratTexture));
-		}
-
-		super.renderRecursively(stack, animatable, bone, renderType, bufferSourceIn, bufferIn, isReRender, partialTick, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+	public void scaleModelForRender(float widthScale, float heightScale, MatrixStack poseStack, RatEntity animatable, BakedGeoModel model, boolean isReRender, float partialTick, int packedLight, int packedOverlay) {
+		super.scaleModelForRender(animatable.isBaby() ? widthScale / 2 : widthScale, animatable.isBaby() ? heightScale / 2 : heightScale, poseStack, animatable, model, isReRender, partialTick, packedLight, packedOverlay);
 	}
 
 	@Override
