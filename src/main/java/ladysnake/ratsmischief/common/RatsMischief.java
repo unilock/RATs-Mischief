@@ -14,7 +14,6 @@ import ladysnake.ratsmischief.mialeemisc.MialeeMisc;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.decoration.painting.PaintingVariant;
-import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.SpecialRecipeSerializer;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -23,9 +22,7 @@ import net.minecraft.world.Difficulty;
 
 public class RatsMischief implements ModInitializer {
 	public static final String MOD_ID = "ratsmischief";
-	public static final SpecialRecipeSerializer<SpyRatCraftingRecipe> SPY_RAT_RECIPE = RecipeSerializer.register(
-		"ratsmischief:crafting_special_spy_rat", new SpecialRecipeSerializer<>(SpyRatCraftingRecipe::new)
-	);
+	public static final SpecialRecipeSerializer<SpyRatCraftingRecipe> SPY_RAT_RECIPE = Registry.register(Registries.RECIPE_SERIALIZER, id("crafting_special_spy_rat"), new SpecialRecipeSerializer<>(SpyRatCraftingRecipe::new));
 
 	public static Identifier id(String path) {
 		return new Identifier(MOD_ID, path);

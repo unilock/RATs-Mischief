@@ -20,7 +20,7 @@ public class SpyRatCraftingRecipe extends SpecialCraftingRecipe {
 	private static final Ingredient ENDER_EYE = Ingredient.ofItems(Items.ENDER_EYE);
 
 	public SpyRatCraftingRecipe(Identifier id, CraftingRecipeCategory craftingCategory) {
-		super(id, CraftingRecipeCategory.MISC);
+		super(id, craftingCategory);
 	}
 
 	@Override
