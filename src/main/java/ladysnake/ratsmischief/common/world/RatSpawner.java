@@ -16,6 +16,7 @@ import net.minecraft.world.SpawnHelper;
 import net.minecraft.world.poi.PointOfInterestStorage;
 import net.minecraft.world.poi.PointOfInterestTypes;
 import net.minecraft.world.spawner.Spawner;
+
 import java.util.List;
 
 public class RatSpawner implements Spawner {

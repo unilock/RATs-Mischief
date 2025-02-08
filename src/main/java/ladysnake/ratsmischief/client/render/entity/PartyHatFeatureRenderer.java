@@ -27,24 +27,22 @@ public class PartyHatFeatureRenderer extends GeoRenderLayer<RatEntity> {
 	}
 
 	@Override
-	public void render(MatrixStack matrixStackIn, RatEntity ratEntity, BakedGeoModel bakedModel, RenderLayer renderType, VertexConsumerProvider bufferSourceIn, VertexConsumer bufferIn, float partialTicks, int packedLightIn, int packedOverlayIn) {
-		if (RatsMischiefUtils.IS_BIRTHDAY && !DISALLOWED_TYPES.contains(ratEntity.getRatType())) {
+	public void render(MatrixStack poseStack, RatEntity animatable, BakedGeoModel bakedModel, RenderLayer renderType, VertexConsumerProvider bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
+		if (RatsMischiefUtils.IS_BIRTHDAY && !DISALLOWED_TYPES.contains(animatable.getRatType())) {
 			if (TEXTURES == null) {
 				TEXTURES = new Identifier[RatEntity.PartyHat.values().length];
 				for (RatEntity.PartyHat hat : RatEntity.PartyHat.values()) {
 					TEXTURES[hat.ordinal()] = RatsMischief.id("textures/entity/birthday_hats/" + hat.toString().toLowerCase() + ".png");
 				}
 			}
-			Identifier hatTexture = TEXTURES[ratEntity.getPartyHat().ordinal()];
-			this.partyHatEntityRenderer.defaultRender(
-				matrixStackIn,
-				ratEntity,
-				bufferSourceIn,
-				RenderLayer.getEntityCutout(hatTexture),
-				bufferIn,
-				0.0F,
-				partialTicks,
-				packedLightIn
+			this.partyHatEntityRenderer.setTexture(TEXTURES[animatable.getPartyHat().ordinal()]);
+			this.partyHatEntityRenderer.render(
+				animatable,
+				animatable.getYaw(),
+				partialTick,
+				poseStack,
+				bufferSource,
+				packedLight
 			);
 		}
 	}

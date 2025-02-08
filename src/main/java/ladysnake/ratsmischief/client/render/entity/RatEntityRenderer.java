@@ -24,26 +24,26 @@ public class RatEntityRenderer extends GeoEntityRenderer<RatEntity> {
 	public RatEntityRenderer(EntityRendererFactory.Context context) {
 		super(context, new RatEntityModel());
 		this.shadowRadius = 0.35f;
-		this.addRenderLayer(new PartyHatFeatureRenderer(this, new PartyHatEntityRenderer(context, new RatEntityModel())));
 		this.addRenderLayer(new EnderEyeFeatureRenderer(this, new EnderEyeEntityRenderer(context, new RatEntityModel())));
+		this.addRenderLayer(new PartyHatFeatureRenderer(this, new PartyHatEntityRenderer(context, new RatEntityModel())));
 	}
 
 	@Override
-	public Vec3d getPositionOffset(RatEntity rat, float tickDelta) {
-		if (rat.isSneaking()) {
+	public Vec3d getPositionOffset(RatEntity entity, float tickDelta) {
+		if (entity.isSneaking()) {
 			return new Vec3d(0, 0.15, 0);
 		}
 
-		return super.getPositionOffset(rat, tickDelta);
+		return super.getPositionOffset(entity, tickDelta);
 	}
 
 	@Override
-	public void render(RatEntity ratEntity, float entityYaw, float partialTick, MatrixStack poseStack, VertexConsumerProvider bufferSource, int packedLight) {
-		if (ratEntity.isFlying() && ratEntity.age < 5) {
+	public void render(RatEntity entity, float entityYaw, float partialTick, MatrixStack poseStack, VertexConsumerProvider bufferSource, int packedLight) {
+		if (entity.isFlying() && entity.age < 5) {
 			return;
 		}
 
-		super.render(ratEntity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
+		super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
 	}
 
 	@Override
@@ -74,16 +74,11 @@ public class RatEntityRenderer extends GeoEntityRenderer<RatEntity> {
 	}
 
 	@Override
-	protected int getBlockLight(RatEntity rat, BlockPos blockPos) {
-		if (rat.getRatType() == RatEntity.Type.RAT_KID && rat.getRatColor() == DyeColor.PURPLE) {
+	protected int getBlockLight(RatEntity entity, BlockPos pos) {
+		if (entity.getRatType() == RatEntity.Type.RAT_KID && entity.getRatColor() == DyeColor.PURPLE) {
 			return 15;
 		} else {
-			return super.getBlockLight(rat, blockPos);
+			return super.getBlockLight(entity, pos);
 		}
-	}
-
-	@Override
-	public boolean hasLabel(RatEntity animatable) {
-		return super.hasLabel(animatable) && !animatable.isInvisible();
 	}
 }

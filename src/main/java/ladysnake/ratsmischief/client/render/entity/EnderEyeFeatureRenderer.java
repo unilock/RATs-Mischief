@@ -22,17 +22,15 @@ public class EnderEyeFeatureRenderer extends GeoRenderLayer<RatEntity> {
 	}
 
 	@Override
-	public void render(MatrixStack matrixStackIn, RatEntity ratEntity, BakedGeoModel bakedModel, RenderLayer renderType, VertexConsumerProvider bufferSourceIn, VertexConsumer bufferIn, float partialTicks, int packedLightIn, int packedOverlayIn) {
-		if (ratEntity.isSpy() && !ratEntity.isInvisible()) {
-			this.enderEyeEntityRenderer.defaultRender(
-				matrixStackIn,
-				ratEntity,
-				bufferSourceIn,
-				RenderLayer.getEntityCutout(TEXTURE),
-				bufferIn,
-				0.0F,
-				partialTicks,
-				packedLightIn
+	public void render(MatrixStack poseStack, RatEntity animatable, BakedGeoModel bakedModel, RenderLayer renderType, VertexConsumerProvider bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlayIn) {
+		if (animatable.isSpy() && !animatable.isInvisible()) {
+			this.enderEyeEntityRenderer.render(
+				animatable,
+				animatable.getYaw(),
+				partialTick,
+				poseStack,
+				bufferSource,
+				packedLight
 			);
 		}
 	}
