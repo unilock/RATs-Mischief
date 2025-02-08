@@ -1,4 +1,4 @@
-package ladysnake.ratsmischief.common.init;//package doctor4t.ratsmischief.common.init;
+//package ladysnake.ratsmischief.common.init;
 //
 //import doctor4t.ratsmischief.common.RatsMischief;
 //import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;

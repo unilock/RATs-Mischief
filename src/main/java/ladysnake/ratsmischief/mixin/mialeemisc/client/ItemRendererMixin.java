@@ -1,34 +1,42 @@
 package ladysnake.ratsmischief.mixin.mialeemisc.client;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
+import ladysnake.ratsmischief.client.RatsMischiefClient;
 import ladysnake.ratsmischief.common.init.ModItems;
 import net.minecraft.client.render.item.ItemModels;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.util.ModelIdentifier;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ItemRenderer.class)
 public abstract class ItemRendererMixin {
+	@Shadow
+	@Final
+	private ItemModels models;
 
-	@Shadow @Final private ItemModels models;
+	@Inject(method = "renderItem(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformationMode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V", at = @At("HEAD"))
+	private void mialeeMisc$nonheldItemModel(CallbackInfo ci, @Local(argsOnly = true) ItemStack stack, @Local(argsOnly = true) ModelTransformationMode renderMode, @Local(argsOnly = true) LocalRef<BakedModel> modelRef) {
+		if (stack.isOf(ModItems.RAT_MASTER_MASK) && (renderMode == ModelTransformationMode.GUI || renderMode == ModelTransformationMode.GROUND || renderMode == ModelTransformationMode.FIXED)) {
+			modelRef.set(this.models.getModelManager().getModel(RatsMischiefClient.RAT_MASTER_MASK));
+		}
+	}
 
-	@Inject(method = "getModel", at = @At("HEAD"), cancellable = true)
-	private void mialeeMisc$heldItemModel(ItemStack stack, World world, LivingEntity entity, int seed, CallbackInfoReturnable<BakedModel> cir) {
-		if (ModItems.RAT_MASTER_MASK.equals(stack.getItem())) {
-			var bakedModel = this.models.getModelManager().getModel(new ModelIdentifier(new Identifier("minecraft:trident_in_hand"), "inventory"));
-			var clientWorld = world instanceof ClientWorld ? (ClientWorld) world : null;
-			var bakedModel2 = bakedModel.getOverrides().apply(bakedModel, stack, clientWorld, entity, seed);
-			cir.setReturnValue(bakedModel2 == null ? this.models.getModelManager().getMissingModel() : bakedModel2);
+	@WrapOperation(method = "getModel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/item/ItemModels;getModel(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/client/render/model/BakedModel;"))
+	private BakedModel mialeeMisc$heldItemModel(ItemModels instance, ItemStack stack, Operation<BakedModel> original) {
+		if (stack.isOf(ModItems.RAT_MASTER_MASK)) {
+			return this.models.getModelManager().getModel(RatsMischiefClient.RAT_MASTER_MASK_WORN);
+		} else {
+			return original.call(instance, stack);
 		}
 	}
 }
