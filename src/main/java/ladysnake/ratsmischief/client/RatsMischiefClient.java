@@ -4,7 +4,6 @@ import ladysnake.ratsmischief.client.render.entity.RatEntityRenderer;
 import ladysnake.ratsmischief.common.RatsMischief;
 import ladysnake.ratsmischief.common.init.ModEntities;
 import ladysnake.ratsmischief.common.init.ModItems;
-import ladysnake.ratsmischief.common.init.ModParticles;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
@@ -35,8 +34,8 @@ public class RatsMischiefClient implements ClientModInitializer {
 		EntityModelLayerRegistry.registerModelLayer(RAT_MASTER_ARMOR_OUTER_LAYER, () -> TexturedModelData.of(PlayerEntityModel.getTexturedModelData(new Dilation(0.29f), false), 64, 64));
 		EntityModelLayerRegistry.registerModelLayer(RAT_MASTER_ARMOR_OUTER_LAYER_SLIM, () -> TexturedModelData.of(PlayerEntityModel.getTexturedModelData(new Dilation(0.29f), true), 64, 64));
 
-		ModParticles.registerFactories();
-		ModParticles.init();
+//		ModParticles.registerFactories();
+//		ModParticles.init();
 
 		EntityRendererRegistry.register(ModEntities.RAT, RatEntityRenderer::new);
 

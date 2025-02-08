@@ -1,7 +1,6 @@
 package ladysnake.ratsmischief.common;
 
 import ladysnake.ratsmischief.client.render.item.recipe.SpyRatCraftingRecipe;
-import ladysnake.ratsmischief.common.init.ModBlocks;
 import ladysnake.ratsmischief.common.init.ModEnchantments;
 import ladysnake.ratsmischief.common.init.ModEntities;
 import ladysnake.ratsmischief.common.init.ModItems;
@@ -32,7 +31,7 @@ public class RatsMischief implements ModInitializer {
 	public void onInitialize() {
 		// initializing stuff
 		ModEntities.initialize();
-		ModBlocks.initialize();
+//		ModBlocks.initialize();
 //		ModItemGroup.initialize();
 		ModItems.initialize();
 		ModEnchantments.initialize();
