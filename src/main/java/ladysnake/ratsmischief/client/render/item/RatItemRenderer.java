@@ -68,8 +68,8 @@ public class RatItemRenderer extends GeoItemRenderer<RatItem> {
 		}
 
 		poseStack.pop();
-		this.currentRenderLayer = null;
 		this.currentRatTexture = null;
+		this.currentRenderLayer = null;
 	}
 
 	private void bindTextureAndRender(Identifier texture, ItemStack stack, ModelTransformationMode transformType, MatrixStack poseStack, VertexConsumerProvider bufferSource, int packedLight, int packedOverlay) {

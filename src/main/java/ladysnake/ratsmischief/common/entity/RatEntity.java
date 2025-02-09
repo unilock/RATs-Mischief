@@ -241,32 +241,27 @@ public class RatEntity extends TameableEntity implements GeoEntity, Angerable {
 
 	private <E extends GeoAnimatable> PlayState predicate(AnimationState<E> event) {
 		if (this.isFlying()) {
-			event.getController().setAnimation(ANIM_FLYING);
-			return PlayState.CONTINUE;
+			return event.setAndContinue(ANIM_FLYING);
 		} else if (this.isEating()) {
-			event.getController().setAnimation(ANIM_EATING);
-			return PlayState.CONTINUE;
+			return event.setAndContinue(ANIM_EATING);
 		} else if (this.isSitting() || this.isSneaking()) {
 			this.setSniffing(false);
 			this.setEating(false);
-			event.getController().setAnimation(ANIM_SITTING);
-			return PlayState.CONTINUE;
+			return event.setAndContinue(ANIM_SITTING);
 		} else if (event.isMoving()) {
 			this.setSniffing(false);
 			this.setEating(false);
 			if (this.getRatType() == Type.JERMA) {
-				event.getController().setAnimation(ANIM_RUNNING_JERMA);
+				return event.setAndContinue(ANIM_RUNNING_JERMA);
 			} else {
-				event.getController().setAnimation(ANIM_RUNNING);
+				return event.setAndContinue(ANIM_RUNNING);
 			}
-			return PlayState.CONTINUE;
 		} else if (this.isSniffing()) {
 			if (this.getRatType() == Type.RAT_KID || RatsMischiefUtils.IS_WORLD_RAT_DAY || RatsMischiefUtils.IS_BIRTHDAY) {
-				event.getController().setAnimation(ANIM_DANCING);
+				return event.setAndContinue(ANIM_DANCING);
 			} else {
-				event.getController().setAnimation(ANIM_SNIFFING);
+				return event.setAndContinue(ANIM_SNIFFING);
 			}
-			return PlayState.CONTINUE;
 		}
 
 		return PlayState.STOP;
